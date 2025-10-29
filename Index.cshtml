@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Digital Clock & Countdown Timer";
+}
+
+<div class="container text-center mt-5">
+    <h1 class="text-primary mb-4">🕒 Digital Clock & Countdown Timer</h1>
+
+    <!-- Digital Clock -->
+    <div class="card shadow-lg p-4 mb-4" style="max-width:400px; margin:auto;">
+        <h3 class="mb-3">Current Time</h3>
+        <h2 id="clock" class="text-success"></h2>
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="card shadow-lg p-4" style="max-width:400px; margin:auto;">
+        <h3 class="mb-3">Countdown Timer</h3>
+
+        <input type="number" id="minutes" class="form-control mb-3" placeholder="Enter minutes" min="1" />
+        <button onclick="startCountdown()" class="btn btn-primary w-100 mb-3">Start Countdown</button>
+
+        <h2 id="timer" class="text-danger"></h2>
+    </div>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+    // 🔹 Live Digital Clock
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 🔹 Countdown Timer
+    let countdownInterval;
+
+    function startCountdown() {
+        clearInterval(countdownInterval);
+        let totalSeconds = parseInt(document.getElementById("minutes").value) * 60;
+
+        if (isNaN(totalSeconds) || totalSeconds <= 0) {
+            alert("Please enter a valid number of minutes!");
+            return;
+        }
+
+        countdownInterval = setInterval(() => {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            document.getElementById("timer").innerText =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (totalSeconds <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("timer").innerText = "⏰ Time's Up!";
+            }
+            totalSeconds--;
+        }, 1000);
+    }
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
